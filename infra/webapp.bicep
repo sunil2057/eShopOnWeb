@@ -5,6 +5,8 @@ param costCenterValue string = 'IT-Department' // 🏷️ Added parameter for th
 
 var appServicePlanName = toLower('AppServicePlan-${webAppName}')
 
+
+
 resource appServicePlan 'Microsoft.Web/serverfarms@2022-09-01' = {
   name: appServicePlanName
   location: location
@@ -13,12 +15,14 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2022-09-01' = {
   }
   sku: {
     name: sku
+    tier: 'PremiumV4' 
   }
   tags: {
-    CostCenter: costCenterValue // 🏷️ Added required tag
+    CostCenter: costCenterValue 
   }
 }
 
+// ... rest of the appService resource remains the same ...
 resource appService 'Microsoft.Web/sites@2022-09-01' = {
   name: webAppName
   kind: 'app'
