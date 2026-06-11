@@ -1,6 +1,7 @@
-param webAppName string // = uniqueString(resourceGroup().id) // unique String gets created from az cli instructions
-param sku string = 'S1' // The SKU of App Service Plan
+param webAppName string 
+param sku string = 'P0v4' // 🔥 Changed default from 'S1' to 'P0v4' to fix the quota error
 param location string = resourceGroup().location
+param costCenterValue string = 'IT-Department' // 🏷️ Added parameter for the required policy tag
 
 var appServicePlanName = toLower('AppServicePlan-${webAppName}')
 
@@ -13,7 +14,11 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2022-09-01' = {
   sku: {
     name: sku
   }
+  tags: {
+    CostCenter: costCenterValue // 🏷️ Added required tag
+  }
 }
+
 resource appService 'Microsoft.Web/sites@2022-09-01' = {
   name: webAppName
   kind: 'app'
@@ -33,5 +38,8 @@ resource appService 'Microsoft.Web/sites@2022-09-01' = {
         }
       ]
     }
+  }
+  tags: {
+    CostCenter: costCenterValue // 🏷️ Added required tag
   }
 }
